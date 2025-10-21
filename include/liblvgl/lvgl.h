@@ -117,7 +117,7 @@ extern "C" {
 
 #include "liblvgl/drivers/lv_drivers.h"
 
-// #include "liblvgl/lv_api_map_v8.h"
+#include "liblvgl/lv_api_map_v8.h"
 #include "liblvgl/lv_api_map_v9_0.h"
 #include "liblvgl/lv_api_map_v9_1.h"
 
