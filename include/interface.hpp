@@ -9,6 +9,8 @@ extern lv_obj_t * temp_label_dbr;
 extern lv_obj_t * temp_label_arm;
 extern lv_obj_t * temp_label_clw;
 
+extern const lv_img_dsc_t creature;
+
 void initialize_interface();
 void temp_update_task(void* param);
 

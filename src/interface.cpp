@@ -10,7 +10,6 @@ lv_obj_t * temp_label_clw = NULL;
 lv_obj_t * auton_status_label = NULL;
 
 int selected_auton = 0;
-lv_obj_t * toggle_display_image = NULL;
 
 static void auton_btn_click_action(lv_event_t * e) {
     lv_obj_t * btn = (lv_obj_t *)lv_event_get_target(e);
@@ -155,8 +154,27 @@ void create_auton_tab(lv_obj_t * parent_tab) {
     lv_label_set_text(blu_right_label, "BLU Right");
 }
 
-void create_image_tab(lv_obj_t * parent_tab) {
+static void image_button_action(lv_event_t * e) {
+    lv_obj_t * btn = (lv_obj_t *)lv_event_get_target(e); 
     
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED) { 
+        lv_obj_set_style_bg_color(btn, LV_COLOR_MAKE(255, 255, 0), LV_PART_MAIN | LV_STATE_PRESSED);
+    }
+}
+
+void create_image_tab(lv_obj_t * parent_tab) {
+    lv_obj_t * image_btn = lv_btn_create(parent_tab);
+    lv_obj_set_pos(image_btn, 10, 10);
+    lv_obj_set_size(image_btn, 100, 100);
+    lv_obj_add_event_cb(image_btn, image_button_action, LV_EVENT_CLICKED, NULL);
+
+    lv_obj_set_style_bg_color(image_btn, LV_COLOR_MAKE(0, 0, 255), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    extern const lv_img_dsc_t creature; 
+    lv_obj_t * image_child = lv_img_create(image_btn);
+
+    lv_img_set_src(image_child, &creature); 
+    lv_obj_set_align(image_child, LV_ALIGN_CENTER);
 }
 
 void initialize_interface() {
