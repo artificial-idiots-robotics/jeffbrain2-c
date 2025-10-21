@@ -14,6 +14,7 @@
 
 #ifndef _PROS_MAIN_H_
 #include "pros/apix.h"
+#include "pros/misc.h"
 #define _PROS_MAIN_H_
 
 /**
@@ -72,6 +73,10 @@ void opcontrol(void);
 #endif
 
 #ifdef __cplusplus
+/**
+ * You can add C++-only headers here
+ */
+//#include <iostream>
 #endif
 
 #endif  // _PROS_MAIN_H_

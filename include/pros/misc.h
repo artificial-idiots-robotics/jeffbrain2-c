@@ -187,7 +187,7 @@ typedef enum {
  */
 typedef enum {
 	/// The horizontal axis of the controller’s left analog stick.
-	E_CONTROLLER_ANALOG_LEFT_X = 0,
+	E_CONTROLLER_ANALOG_LEFT_X,
 	/// The vertical axis of the controller’s left analog stick.
 	E_CONTROLLER_ANALOG_LEFT_Y,
 	/// The horizontal axis of the controller’s right analog stick.
