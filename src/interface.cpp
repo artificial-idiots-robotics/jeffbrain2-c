@@ -2,6 +2,10 @@
 #include "globals.hpp"
 
 lv_obj_t * main_tabview = NULL;
+lv_obj_t * temp_bar_dbl = NULL;
+lv_obj_t * temp_bar_dbr = NULL;
+lv_obj_t * temp_bar_arm = NULL;
+lv_obj_t * temp_bar_clw = NULL;
 lv_obj_t * temp_label_dbl = NULL;
 lv_obj_t * temp_label_dbr = NULL;
 lv_obj_t * temp_label_arm = NULL;
@@ -9,8 +13,10 @@ lv_obj_t * temp_label_clw = NULL;
 
 lv_obj_t * auton_status_label = NULL;
 lv_obj_t * toggle_display_image = NULL;
+lv_obj_t * config_dropdown = NULL;
 
 int selected_auton = 0;
+int control_mode = 0;
 
 
 static void auton_btn_click_action(lv_event_t * e) {
@@ -77,6 +83,22 @@ void temp_update_task(void* param) {
 }
 
 void create_temp_tab(lv_obj_t * parent_tab) {
+    temp_bar_dbl = lv_bar_create(parent_tab);
+    lv_obj_set_pos(temp_bar_dbl, 10, 10);
+    lv_obj_set_size(temp_bar_dbl, 300, 10);
+    
+    temp_bar_dbr = lv_bar_create(parent_tab);
+    lv_obj_set_pos(temp_bar_dbr, 10, 25);
+    lv_obj_set_size(temp_bar_dbr, 300, 10);
+    
+    temp_bar_arm = lv_bar_create(parent_tab);
+    lv_obj_set_pos(temp_bar_arm, 10, 40);
+    lv_obj_set_size(temp_bar_arm, 300, 10);
+    
+    temp_bar_clw = lv_bar_create(parent_tab);
+    lv_obj_set_pos(temp_bar_clw, 10, 55);
+    lv_obj_set_size(temp_bar_clw, 300, 10);
+
     temp_label_dbl = lv_label_create(parent_tab);
     lv_label_set_text(temp_label_dbl, "DBL: -- C");
     lv_obj_set_pos(temp_label_dbl, 10, 10);
@@ -192,6 +214,23 @@ void create_image_tab(lv_obj_t * parent_tab) {
     lv_obj_add_flag(toggle_display_image, LV_OBJ_FLAG_HIDDEN);
 }
 
+static void drive_mode_dropdown_action(lv_event_t * e) {
+    lv_obj_t * dropdown = (lv_obj_t *)lv_event_get_target(e);
+    
+    // Check if the event was a value change
+    if (lv_event_get_code(e) == LV_EVENT_VALUE_CHANGED) {
+        int selected_index = lv_dropdown_get_selected(dropdown);
+        control_mode = selected_index;
+    }
+}
+
+void create_settings_tab(lv_obj_t * parent_tab) {
+    lv_obj_t * config_dropdown = lv_dropdown_create(parent_tab);
+    lv_obj_set_pos(config_dropdown, 50, 10);
+    lv_dropdown_set_options(config_dropdown, "Arcade\nTank");
+    lv_obj_add_event_cb(config_dropdown, drive_mode_dropdown_action, LV_EVENT_VALUE_CHANGED, NULL);
+}
+
 void initialize_interface() {
     main_tabview = lv_tabview_create(lv_scr_act());
     lv_obj_t * tab_bar = lv_tabview_get_tab_bar(main_tabview);
@@ -206,5 +245,8 @@ void initialize_interface() {
     lv_obj_t * image_tab = lv_tabview_add_tab(main_tabview, "Images");
     create_image_tab(image_tab);
 
-    lv_tabview_set_act(main_tabview, 1, LV_ANIM_OFF); 
+    lv_obj_t * settings_tab = lv_tabview_add_tab(main_tabview, "Settings");
+    create_settings_tab(settings_tab);
+
+    lv_tabview_set_act(main_tabview, 1, LV_ANIM_ON); 
 }

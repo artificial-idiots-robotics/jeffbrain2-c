@@ -3,6 +3,7 @@
 #include "globals.hpp"
 #include "interface.hpp"
 
+
 // Initial function
 void initialize() {
 	drivebase_left.set_gearing(pros::v5::MotorGears::green);
@@ -30,11 +31,21 @@ void autonomous() {}
 
 
 void opcontrol() {
+    extern int control_mode;
+
 	while (true) {
-        int dir = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-		int turn = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		drivebase_left.move(turn + dir);
-		drivebase_right.move(turn - dir);
-		pros::delay(5);
+        if (control_mode == 0) {
+            int dir = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+            int turn = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+            drivebase_left.move(((turn * 0.6) + dir) * 0.8);
+            drivebase_right.move(((turn * 0.6) - dir) * 0.8);
+            pros::delay(5);
+        } else if (control_mode == 1) {
+            int leftdrive = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+            int rightdrive = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
+            drivebase_left.move(leftdrive);
+            drivebase_right.move(-rightdrive);
+            pros::delay(5);
+        }
 	}
 }
