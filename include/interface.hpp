@@ -14,6 +14,7 @@ extern lv_obj_t * temp_label_arm;
 extern lv_obj_t * temp_label_clw;
 extern lv_obj_t * config_dropdown;
 extern int control_mode;
+extern int selected_auton;
 
 extern const lv_img_dsc_t creature;
 

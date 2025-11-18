@@ -3,6 +3,21 @@
 #include "globals.hpp"
 #include "interface.hpp"
 
+const double LMOTOR_GEAR_RATIO = 18.0;
+const double RMOTOR_GEAR_RATIO = 18.0;
+const double AMOTOR_GEAR_RATIO = 18.0;
+const double CMOTOR_GEAR_RATIO = 18.0;
+
+// Utility functions
+double inchesToDegrees(double inches, double gear_ratio, double wheel_diameter) {
+    double circumference = M_PI * wheel_diameter;
+    double degrees = (inches / circumference) * gear_ratio * 360.0;
+    return degrees;
+}
+
+void driveForwardDegrees(pros::Motor targetMotor, double degrees) {
+    targetMotor.move_relative(degrees, 100);
+}
 
 // Initial function
 void initialize() {
@@ -10,6 +25,11 @@ void initialize() {
     drivebase_right.set_gearing(pros::v5::MotorGears::green);
     arm_motor.set_gearing(pros::v5::MotorGears::green);
     claw_motor.set_gearing(pros::v5::MotorGears::green);
+
+    drivebase_left.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    drivebase_right.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    arm_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    claw_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 
     drivebase_left.set_reversed(false);
     drivebase_right.set_reversed(false);
@@ -27,7 +47,32 @@ void competition_initialize() {
 	
 }
 
-void autonomous() {}
+void autonomous() {
+    switch (selected_auton) {
+        case 0:
+            // NONE.
+            break;
+        case 1: 
+            // RED LEFT.
+            break;
+        case 2: 
+            // RED RIGHT.
+            break;
+        case 3:
+            // BLU LEFT.
+            break;
+        case 4: 
+            // BLU RIGHT.
+            break;
+        case 5:
+            // SKILLS.
+            break;
+
+        default:
+            // Incase of variable somehow reaching values beyond our comprehension. Also known as 6.
+            break;
+    }
+}
 
 
 void opcontrol() {
