@@ -1,5 +1,5 @@
 # Jeffbrain 2
-## Program A
+## Program C
 Jeffbrain 2 is the software for our VEX V5 robot, which we've named Jeff 2.
 
 This is Jeffbrain 2 (Program C), which is written in C++. There are two other versions of the program.
