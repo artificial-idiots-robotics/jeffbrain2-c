@@ -428,6 +428,9 @@ void create_test_tab(lv_obj_t * parent_tab) {
     lv_obj_add_style(testmove, &style_m3_btn, 0);
     lv_obj_set_style_bg_color(testmove, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
     lv_obj_set_style_shadow_width(testmove, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
+    
+    lv_obj_t * testmove_label = lv_label_create(cont);
+    lv_label_set_text(testmove_label, "Test MOVE");
 }
 
 void initialize_interface() {
