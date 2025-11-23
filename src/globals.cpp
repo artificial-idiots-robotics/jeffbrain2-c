@@ -1,9 +1,66 @@
+#include "main.h"
 #include "globals.hpp"
 
-pros::Motor drivebase_left(1);
-pros::Motor drivebase_right(2);
-pros::Motor arm_motor(4);
-pros::Motor claw_motor(7);
+pros::Motor drivebase_lf (1);
+pros::Motor drivebase_rf (2);
+pros::Motor arm_motor (4);
+pros::Motor claw_motor (7);
+
+pros::MotorGroup drivebase_l ({1}, pros::MotorGears::green);
+pros::MotorGroup drivebase_r ({2}, pros::MotorGears::green);
+
+// Remind me to replace these values with the actual numbers.
+lemlib::Drivetrain drivebase (
+    &drivebase_l, // Left motors
+    &drivebase_r, // Right motors
+    10, // Track width (inches)
+    lemlib::Omniwheel::NEW_4, // Wheel type
+    200, // Drivetrain RPM
+    2 // Horizontal drift
+);
+
+/* // Honestly, just read the variable names.
+pros::Imu imu(10);
+pros::Rotation horizontal_encoder(20);
+pros::adi::Encoder vertical_encoder('C', 'D', true);
+
+lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_275, -5.75);
+lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib:: Omniwheel::NEW_275, -2.5); */
+
+// The program wouldn't compile without this, despite the fact that I have no sensors yet.
+lemlib::OdomSensors sensors(
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+);
+
+lemlib::ControllerSettings lateral_controller(
+    8, // kP (proportional gain)
+    0, // kI (integral gain)
+    0, // kD (derivative gain)
+    3, // anti windup
+    1, // small error range (degrees)
+    100, // small error range timeout (msec)
+    3, // large error range (degrees)
+    500, // large error range timeout (msec)
+    20 // maximum acceleration (slew)
+);
+
+lemlib::ControllerSettings angular_controller(
+    4, // kP (proportional gain)
+    0, // kI (integral gain)
+    0, // kD (derivative gain)
+    3, // anti windup
+    1, // small error range (degrees)
+    100, // small error range timeout (msec)
+    3, // large error range (degrees)
+    500, // large error range timeout (msec)
+    0 // maximum acceleration (slew)
+);
+
+lemlib::Chassis chassis (drivebase, lateral_controller, angular_controller, sensors);
 
 pros::Controller master_controller(pros::E_CONTROLLER_MASTER);
 pros::Controller partner_controller(pros::E_CONTROLLER_PARTNER);

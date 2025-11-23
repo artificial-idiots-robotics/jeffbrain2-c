@@ -30,6 +30,18 @@ lv_obj_t * config_dropdown = NULL;
 int selected_auton = 0;
 int control_mode = 0;
 
+void create_stats_tab(lv_obj_t * parent_tab) {
+    lv_obj_t * cont = lv_obj_create(parent_tab);
+
+    lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
+
+    lv_obj_set_style_border_width(cont, 0, 0);
+    lv_obj_set_style_pad_all(cont, 0, 0);
+    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_radius(cont, 0, 0);
+}
 
 static void auton_btn_click_action(lv_event_t * e) {
     lv_obj_t * btn = (lv_obj_t *)lv_event_get_target(e);
@@ -52,8 +64,8 @@ static void auton_btn_click_action(lv_event_t * e) {
 
 void temp_update_task(void* param) {
     pros::Motor *motors[] = {
-        &drivebase_left,
-        &drivebase_right,
+        &drivebase_lf,
+        &drivebase_rf,
         &arm_motor,
         &claw_motor
     };
@@ -66,7 +78,7 @@ void temp_update_task(void* param) {
     };
 
     const char *names[] = {
-        "DBL", "DBR", "ARM", "CLW"
+        "DBLF", "DBRF", "ARM", "CLW"
     };
 
     static char buffer[32];
@@ -94,8 +106,8 @@ void temp_update_task(void* param) {
 
 void legacy_temp_update_task(void* param) {
     pros::Motor *motors[] = {
-        &drivebase_left,
-        &drivebase_right,
+        &drivebase_lf,
+        &drivebase_rf,
         &arm_motor,
         &claw_motor
     };
@@ -108,7 +120,7 @@ void legacy_temp_update_task(void* param) {
     };
 
     const char *names[] = {
-        "DBL", "DBR", "ARM", "CLW"
+        "DBLF", "DBRF", "ARM", "CLW"
     };
 
     static char buffer[32];
@@ -154,7 +166,7 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_bar_set_range(temp_bar_dbl, 0, 100);
     
     temp_label_dbl = lv_label_create(cont);
-    lv_label_set_text(temp_label_dbl, "Drivebase left");
+    lv_label_set_text(temp_label_dbl, "Drivebase front left");
     lv_obj_set_pos(temp_label_dbl, 10, 25);
 
     temp_bar_dbr = lv_bar_create(cont);
@@ -163,7 +175,7 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_bar_set_range(temp_bar_dbr, 0, 100);
     
     temp_label_dbr = lv_label_create(cont);
-    lv_label_set_text(temp_label_dbr, "Drivebase right");
+    lv_label_set_text(temp_label_dbr, "Drivebase front right");
     lv_obj_set_pos(temp_label_dbr, 10, 55);
 
     temp_bar_arm = lv_bar_create(cont);
@@ -392,32 +404,6 @@ void create_settings_tab(lv_obj_t * parent_tab) {
     }
 }
 
-static void test_in_move_function_action(void* param) {
-    std::cout << "Jeffbrain2: TEST MOVE task initiated." << std::endl;
-    double inches_to_move = 5.0;
-    double degrees = inchesToDegrees(inches_to_move, DRIVEBASE_GEAR_RATIO, 4.0);
-
-    drivebase_left.move_relative(degrees, 100);
-    drivebase_right.move_relative(degrees, 100); 
-
-    const double error_threshold = 15.0;
-
-    while (std::abs(drivebase_left.get_position() - degrees) > error_threshold) {
-        pros::delay(10); 
-    }
-    
-    drivebase_left.move(0);
-    drivebase_right.move(0);
-
-    std::cout << "Jeffbrain2: TEST MOVE task completed.";
-}
-
-static void test_in_move_function_action_taskhandler(lv_event_t * e) {
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED) {
-        pros::Task testTask(test_in_move_function_action, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TEST MOVE");
-    }
-}
-
 void create_test_tab(lv_obj_t * parent_tab) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
 
@@ -428,22 +414,6 @@ void create_test_tab(lv_obj_t * parent_tab) {
     lv_obj_set_style_pad_all(cont, 0, 0);
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_radius(cont, 0, 0);
-
-    lv_obj_t * test_tab_label = lv_label_create(cont);
-    lv_label_set_text(test_tab_label, "Testing functions");
-    lv_obj_set_pos(test_tab_label, 10, 10);
-    lv_obj_set_width(test_tab_label, LV_PCT(90));
-    
-    lv_obj_t * test_in_move_function = lv_btn_create(cont);
-    lv_obj_set_pos(test_in_move_function, 10, 50);
-    lv_obj_set_size(test_in_move_function, LV_PCT(45), 40);
-    lv_obj_add_event_cb(test_in_move_function, test_in_move_function_action_taskhandler, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(test_in_move_function, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(test_in_move_function, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(test_in_move_function, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-
-    test_in_move_function_label = lv_label_create(test_in_move_function);
-    lv_label_set_text(test_in_move_function_label, "TEST MOVE");
 }
 
 void initialize_interface() {
@@ -479,21 +449,18 @@ void initialize_interface() {
 
     lv_obj_set_style_bg_color(main_tabview, M3_SURFACE_COLOR, LV_PART_MAIN);
     lv_obj_set_style_pad_all(main_tabview, 0, LV_PART_MAIN);
-    
+
+    lv_obj_t * stats_tab = lv_tabview_add_tab(main_tabview, "Stats");
+    create_stats_tab(stats_tab);
     lv_obj_t * temp_tab = lv_tabview_add_tab(main_tabview, "Monitor");
     create_temp_tab(temp_tab);
-    
     lv_obj_t * auton_tab = lv_tabview_add_tab(main_tabview, "Auton");
     create_auton_tab(auton_tab);
-    
     lv_obj_t * image_tab = lv_tabview_add_tab(main_tabview, "Images");
     create_image_tab(image_tab);
-
     lv_obj_t * settings_tab = lv_tabview_add_tab(main_tabview, "Settings");
     create_settings_tab(settings_tab);
-
     lv_obj_t * test_tab = lv_tabview_add_tab(main_tabview, "Test");
     create_test_tab(test_tab);
-
     lv_tabview_set_act(main_tabview, 1, LV_ANIM_ON); 
 }

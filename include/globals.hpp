@@ -3,12 +3,13 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-extern pros::Motor drivebase_left;
-extern pros::Motor drivebase_right;
+extern pros::Motor drivebase_lf;
+extern pros::Motor drivebase_rf;
 extern pros::Motor arm_motor;
 extern pros::Motor claw_motor;
 
-extern pros::MotorGroup drivebase;
+extern pros::MotorGroup drivebase_l;
+extern pros::MotorGroup drivebase_r;
 
 extern pros::Controller master_controller;
 extern pros::Controller partner_controller;
