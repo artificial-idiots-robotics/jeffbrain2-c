@@ -104,50 +104,6 @@ void temp_update_task(void* param) {
     }
 }
 
-void legacy_temp_update_task(void* param) {
-    pros::Motor *motors[] = {
-        &drivebase_lf,
-        &drivebase_rf,
-        &arm_motor,
-        &claw_motor
-    };
-
-    lv_obj_t *labels[] = {
-        temp_label_dbl,
-        temp_label_dbr,
-        temp_label_arm,
-        temp_label_clw
-    };
-
-    const char *names[] = {
-        "DBLF", "DBRF", "ARM", "CLW"
-    };
-
-    static char buffer[32];
-
-    while (true) {
-        for (int i = 0; i < 4; i++) {
-            double current_temp = motors[i]->get_temperature();
-            // double current_temp = 42.0; <- Declare static value to debug task code.
-            lv_obj_t *current_label = labels[i];
-            
-            snprintf(buffer, sizeof(buffer), "%s: %.1f C", names[i], current_temp);
-            lv_label_set_text(current_label, buffer);
-
-            if (current_temp > 999.0) {
-                snprintf(buffer, sizeof(buffer), "%s: ERR", names[i]);
-                lv_obj_set_style_text_color(current_label, LV_COLOR_MAKE(255, 165, 0), LV_PART_MAIN);
-            } else if (current_temp > 55.0) {
-                lv_obj_set_style_text_color(current_label, LV_COLOR_MAKE(255, 0, 0), LV_PART_MAIN);
-            } else {
-                lv_obj_set_style_text_color(current_label, lv_color_white(), LV_PART_MAIN);
-            }
-        }
-
-        pros::delay(200);
-    }
-}
-
 void create_temp_tab(lv_obj_t * parent_tab) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
 
