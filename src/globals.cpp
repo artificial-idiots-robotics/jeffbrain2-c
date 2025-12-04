@@ -6,8 +6,8 @@ pros::Motor drivebase_rf (2);
 pros::Motor arm_motor (4);
 pros::Motor claw_motor (7);
 
-pros::MotorGroup drivebase_l ({1}, pros::MotorGears::green);
-pros::MotorGroup drivebase_r ({2}, pros::MotorGears::green);
+pros::MotorGroup drivebase_l ({1}, pros::MotorGears::blue);
+pros::MotorGroup drivebase_r ({2}, pros::MotorGears::blue);
 
 pros::adi::DigitalOut pneumatics_piston_1('F');
 
