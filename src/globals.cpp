@@ -9,7 +9,7 @@ pros::Motor claw_motor (7);
 pros::MotorGroup drivebase_l ({1}, pros::MotorGears::green);
 pros::MotorGroup drivebase_r ({2}, pros::MotorGears::green);
 
-pros::adi::DigitalOut pneumatics_piston_a('F');
+pros::adi::DigitalOut pneumatics_piston_1('F');
 
 pros::adi::DigitalOut status_LED_1('G');
 pros::adi::DigitalOut status_LED_2('H');
