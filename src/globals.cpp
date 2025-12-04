@@ -3,8 +3,9 @@
 
 pros::Motor drivebase_lf (1);
 pros::Motor drivebase_rf (2);
-pros::Motor arm_motor (4);
-pros::Motor claw_motor (7);
+pros::Motor intake_motor_a (4);
+pros::Motor intake_motor_b (5);
+pros::Motor chain_motor (6);
 
 pros::MotorGroup drivebase_l ({1}, pros::MotorGears::blue);
 pros::MotorGroup drivebase_r ({2}, pros::MotorGears::blue);

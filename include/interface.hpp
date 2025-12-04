@@ -4,14 +4,16 @@
 #define _INTERFACE_HPP_
 
 extern lv_obj_t * main_tabview;
-extern lv_obj_t * temp_bar_dbl;
-extern lv_obj_t * temp_bar_dbr;
-extern lv_obj_t * temp_bar_arm;
-extern lv_obj_t * temp_bar_clw;
-extern lv_obj_t * temp_label_dbl;
-extern lv_obj_t * temp_label_dbr;
-extern lv_obj_t * temp_label_arm;
-extern lv_obj_t * temp_label_clw;
+extern lv_obj_t * drivebase_lf_tempbar;
+extern lv_obj_t * drivebase_rf_tempbar;
+extern lv_obj_t * intake_motor_a_tempbar;
+extern lv_obj_t * intake_motor_b_tempbar;
+extern lv_obj_t * chain_motor_tempbar;
+extern lv_obj_t * drivebase_lf_templabel;
+extern lv_obj_t * drivebase_rf_templabel;
+extern lv_obj_t * intake_motor_a_templabel;
+extern lv_obj_t * intake_motor_b_templabel;
+extern lv_obj_t * chain_motor_templabel;
 extern lv_obj_t * config_dropdown;
 extern lv_obj_t * test_in_move_function_label;
 extern int control_mode;

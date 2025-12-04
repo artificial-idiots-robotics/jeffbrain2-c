@@ -5,8 +5,9 @@
 
 extern pros::Motor drivebase_lf;
 extern pros::Motor drivebase_rf;
-extern pros::Motor arm_motor;
-extern pros::Motor claw_motor;
+extern pros::Motor intake_motor_a;
+extern pros::Motor intake_motor_b;
+extern pros::Motor chain_motor;
 
 extern pros::MotorGroup drivebase_l;
 extern pros::MotorGroup drivebase_r;
