@@ -116,41 +116,50 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_radius(cont, 0, 0);
 
-    temp_bar_dbl = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_dbl, 10, 10);
-    lv_obj_set_size(temp_bar_dbl, 440, 10);
-    lv_bar_set_range(temp_bar_dbl, 0, 100);
+    drivebase_lf_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(drivebase_lf_tempbar, 10, 10);
+    lv_obj_set_size(drivebase_lf_tempbar, 440, 10);
+    lv_bar_set_range(drivebase_lf_tempbar, 0, 100);
     
-    temp_label_dbl = lv_label_create(cont);
-    lv_label_set_text(temp_label_dbl, "Drivebase front left");
-    lv_obj_set_pos(temp_label_dbl, 10, 25);
+    drivebase_lf_templabel = lv_label_create(cont);
+    lv_label_set_text(drivebase_lf_templabel, "Drivebase front left");
+    lv_obj_set_pos(drivebase_lf_templabel, 10, 25);
 
-    temp_bar_dbr = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_dbr, 10, 40);
-    lv_obj_set_size(temp_bar_dbr, 440, 10);
-    lv_bar_set_range(temp_bar_dbr, 0, 100);
+    drivebase_rf_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(drivebase_rf_tempbar, 10, 40);
+    lv_obj_set_size(drivebase_rf_tempbar, 440, 10);
+    lv_bar_set_range(drivebase_rf_tempbar, 0, 100);
     
-    temp_label_dbr = lv_label_create(cont);
-    lv_label_set_text(temp_label_dbr, "Drivebase front right");
-    lv_obj_set_pos(temp_label_dbr, 10, 55);
+    drivebase_rf_templabel = lv_label_create(cont);
+    lv_label_set_text(drivebase_rf_templabel, "Drivebase front right");
+    lv_obj_set_pos(drivebase_rf_templabel, 10, 55);
 
-    temp_bar_arm = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_arm, 10, 70);
-    lv_obj_set_size(temp_bar_arm, 440, 10);
-    lv_bar_set_range(temp_bar_arm, 0, 100);
+    intake_motor_a_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(intake_motor_a_tempbar, 10, 70);
+    lv_obj_set_size(intake_motor_a_tempbar, 440, 10);
+    lv_bar_set_range(intake_motor_a_tempbar, 0, 100);
     
-    temp_label_arm = lv_label_create(cont);
-    lv_label_set_text(temp_label_arm, "Arm");
-    lv_obj_set_pos(temp_label_arm, 10, 85);
+    intake_motor_a_templabel = lv_label_create(cont);
+    lv_label_set_text(intake_motor_a_templabel, "Intake motor A");
+    lv_obj_set_pos(intake_motor_a_templabel, 10, 85);
 
-    temp_bar_clw = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_clw, 10, 100);
-    lv_obj_set_size(temp_bar_clw, 440, 10);
-    lv_bar_set_range(temp_bar_clw, 0, 100);
+    intake_motor_b_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(intake_motor_b_tempbar, 10, 100);
+    lv_obj_set_size(intake_motor_b_tempbar, 440, 10);
+    lv_bar_set_range(intake_motor_b_tempbar, 0, 100);
 
-    temp_label_clw = lv_label_create(cont);
-    lv_label_set_text(temp_label_clw, "Claw");
-    lv_obj_set_pos(temp_label_clw, 10, 115);
+    intake_motor_b_templabel = lv_label_create(cont);
+    lv_label_set_text(intake_motor_b_templabel, "Intake motor B");
+    lv_obj_set_pos(intake_motor_b_templabel, 10, 115);
+
+    chain_motor_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(chain_motor_tempbar, 10, 130);
+    lv_obj_set_size(chain_motor_tempbar, 440, 10);
+    lv_bar_set_range(chain_motor_tempbar, 0, 100);
+
+    chain_motor_templabel = lv_label_create(cont);
+    lv_label_set_text(chain_motor_templabel, "Chain motor");
+    lv_obj_set_pos(chain_motor_templabel, 10, 145);
 
     lv_obj_set_style_radius(temp_bar_dbl, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(temp_bar_dbr, 8, LV_PART_MAIN);
