@@ -3,12 +3,14 @@
 
 pros::Motor drivebase_lf (1);
 pros::Motor drivebase_rf (2);
-pros::Motor intake_motor_a (4);
-pros::Motor intake_motor_b (5);
-pros::Motor chain_motor (6);
+pros::Motor drivebase_lb (3);
+pros::Motor drivebase_rb (4);
+pros::Motor intake_motor_a (5);
+pros::Motor intake_motor_b (6);
+pros::Motor chain_motor (7);
 
-pros::MotorGroup drivebase_l ({1}, pros::MotorGears::blue);
-pros::MotorGroup drivebase_r ({2}, pros::MotorGears::blue);
+pros::MotorGroup drivebase_l ({1, 2}, pros::MotorGears::blue);
+pros::MotorGroup drivebase_r ({3, 4}, pros::MotorGears::blue);
 
 pros::adi::DigitalOut pneumatics_piston_1('F');
 

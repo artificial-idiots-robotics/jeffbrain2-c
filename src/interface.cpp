@@ -13,16 +13,18 @@ static lv_style_t style_m3_btn;
 lv_obj_t * main_tabview = NULL;
 lv_obj_t * drivebase_lf_tempbar = NULL;
 lv_obj_t * drivebase_rf_tempbar = NULL;
+lv_obj_t * drivebase_lb_tempbar = NULL;
+lv_obj_t * drivebase_rb_tempbar = NULL;
 lv_obj_t * intake_motor_a_tempbar = NULL;
 lv_obj_t * intake_motor_b_tempbar = NULL;
 lv_obj_t * chain_motor_tempbar = NULL;
 lv_obj_t * drivebase_lf_templabel = NULL;
 lv_obj_t * drivebase_rf_templabel = NULL;
+lv_obj_t * drivebase_lb_templabel = NULL;
+lv_obj_t * drivebase_rb_templabel = NULL;
 lv_obj_t * intake_motor_a_templabel = NULL;
 lv_obj_t * intake_motor_b_templabel = NULL;
 lv_obj_t * chain_motor_templabel = NULL;
-
-pros::MotorGroup drivebase({1, 2});
 
 lv_obj_t * auton_status_label = NULL;
 lv_obj_t * test_in_move_function_label = NULL;
@@ -68,6 +70,8 @@ void temp_update_task(void* param) {
     pros::Motor *motors[] = {
         &drivebase_lf,
         &drivebase_rf,
+        &drivebase_lb,
+        &drivebase_rb,
         &intake_motor_a,
         &intake_motor_b,
         &chain_motor
@@ -76,13 +80,15 @@ void temp_update_task(void* param) {
     lv_obj_t *bars[] = {
         drivebase_lf_tempbar,
         drivebase_rf_tempbar,
+        drivebase_lb_tempbar,
+        drivebase_rb_tempbar,
         intake_motor_a_tempbar,
         intake_motor_b_tempbar,
         chain_motor_tempbar
     };
 
     const char *names[] = {
-        "DBLF", "DBRF", "INA", "INB", "CHN"
+        "DBLF", "DBRF", "DBLB", "DBRB", "INA", "INB", "CHN"
     };
 
     static char buffer[32];
@@ -138,56 +144,84 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_label_set_text(drivebase_rf_templabel, "Drivebase front right");
     lv_obj_set_pos(drivebase_rf_templabel, 10, 55);
 
+    drivebase_lb_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(drivebase_lb_tempbar, 10, 70);
+    lv_obj_set_size(drivebase_lb_tempbar, 440, 10);
+    lv_bar_set_range(drivebase_lb_tempbar, 0, 100);
+
+    drivebase_lb_templabel = lv_label_create(cont);
+    lv_label_set_text(drivebase_lb_templabel, "Drivebase back left");
+    lv_obj_set_pos(drivebase_lb_templabel, 10, 85);
+
+    drivebase_rb_tempbar = lv_bar_create(cont);
+    lv_obj_set_pos(drivebase_rb_tempbar, 10, 100);
+    lv_obj_set_size(drivebase_rb_tempbar, 440, 10);
+    lv_bar_set_range(drivebase_rb_tempbar, 0, 100);
+
+    drivebase_rb_templabel = lv_label_create(cont);
+    lv_label_set_text(drivebase_rb_templabel, "Drivebase back right");
+    lv_obj_set_pos(drivebase_rb_templabel, 10, 115);
+
     intake_motor_a_tempbar = lv_bar_create(cont);
-    lv_obj_set_pos(intake_motor_a_tempbar, 10, 70);
+    lv_obj_set_pos(intake_motor_a_tempbar, 10, 130);
     lv_obj_set_size(intake_motor_a_tempbar, 440, 10);
     lv_bar_set_range(intake_motor_a_tempbar, 0, 100);
     
     intake_motor_a_templabel = lv_label_create(cont);
     lv_label_set_text(intake_motor_a_templabel, "Intake motor A");
-    lv_obj_set_pos(intake_motor_a_templabel, 10, 85);
+    lv_obj_set_pos(intake_motor_a_templabel, 10, 145);
 
     intake_motor_b_tempbar = lv_bar_create(cont);
-    lv_obj_set_pos(intake_motor_b_tempbar, 10, 100);
+    lv_obj_set_pos(intake_motor_b_tempbar, 10, 160);
     lv_obj_set_size(intake_motor_b_tempbar, 440, 10);
     lv_bar_set_range(intake_motor_b_tempbar, 0, 100);
 
     intake_motor_b_templabel = lv_label_create(cont);
     lv_label_set_text(intake_motor_b_templabel, "Intake motor B");
-    lv_obj_set_pos(intake_motor_b_templabel, 10, 115);
+    lv_obj_set_pos(intake_motor_b_templabel, 10, 175);
 
     chain_motor_tempbar = lv_bar_create(cont);
-    lv_obj_set_pos(chain_motor_tempbar, 10, 130);
+    lv_obj_set_pos(chain_motor_tempbar, 10, 190);
     lv_obj_set_size(chain_motor_tempbar, 440, 10);
     lv_bar_set_range(chain_motor_tempbar, 0, 100);
 
     chain_motor_templabel = lv_label_create(cont);
     lv_label_set_text(chain_motor_templabel, "Chain motor");
-    lv_obj_set_pos(chain_motor_templabel, 10, 145);
+    lv_obj_set_pos(chain_motor_templabel, 10, 205);
 
     lv_obj_set_style_radius(drivebase_lf_tempbar, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(drivebase_rf_tempbar, 8, LV_PART_MAIN);
+    lv_obj_set_style_radius(drivebase_lb_tempbar, 8, LV_PART_MAIN);
+    lv_obj_set_style_radius(drivebase_rb_tempbar, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(intake_motor_a_tempbar, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(intake_motor_b_tempbar, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(chain_motor_tempbar, 8, LV_PART_MAIN);
     lv_obj_set_style_bg_color(drivebase_lf_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_bg_color(drivebase_rf_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(drivebase_lb_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(drivebase_rb_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_bg_color(intake_motor_a_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_bg_color(intake_motor_b_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_bg_color(chain_motor_tempbar, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_border_width(drivebase_lf_tempbar, 1, LV_PART_MAIN);
     lv_obj_set_style_border_width(drivebase_rf_tempbar, 1, LV_PART_MAIN);
+    lv_obj_set_style_border_width(drivebase_lb_tempbar, 1, LV_PART_MAIN);
+    lv_obj_set_style_border_width(drivebase_rb_tempbar, 1, LV_PART_MAIN);
     lv_obj_set_style_border_width(intake_motor_a_tempbar, 1, LV_PART_MAIN);
     lv_obj_set_style_border_width(intake_motor_b_tempbar, 1, LV_PART_MAIN);
     lv_obj_set_style_border_width(chain_motor_tempbar, 1, LV_PART_MAIN);
     lv_obj_set_style_border_color(drivebase_lf_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
     lv_obj_set_style_border_color(drivebase_rf_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
+    lv_obj_set_style_border_color(drivebase_lb_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
+    lv_obj_set_style_border_color(drivebase_rb_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
     lv_obj_set_style_border_color(intake_motor_a_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
     lv_obj_set_style_border_color(intake_motor_b_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
     lv_obj_set_style_border_color(chain_motor_tempbar, lv_color_hex(0x49454F), LV_PART_MAIN);
 
     lv_obj_set_style_radius(drivebase_lf_tempbar, 8, LV_PART_INDICATOR);
     lv_obj_set_style_radius(drivebase_rf_tempbar, 8, LV_PART_INDICATOR);
+    lv_obj_set_style_radius(drivebase_lb_tempbar, 8, LV_PART_INDICATOR);
+    lv_obj_set_style_radius(drivebase_rb_tempbar, 8, LV_PART_INDICATOR);
     lv_obj_set_style_radius(intake_motor_a_tempbar, 8, LV_PART_INDICATOR);
     lv_obj_set_style_radius(intake_motor_b_tempbar, 8, LV_PART_INDICATOR);
     lv_obj_set_style_radius(chain_motor_tempbar, 8, LV_PART_INDICATOR);
