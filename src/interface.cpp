@@ -16,10 +16,11 @@ lv_obj_t * drivebase_rf_tempbar = NULL;
 lv_obj_t * intake_motor_a_tempbar = NULL;
 lv_obj_t * intake_motor_b_tempbar = NULL;
 lv_obj_t * chain_motor_tempbar = NULL;
-lv_obj_t * temp_label_dbl = NULL;
-lv_obj_t * temp_label_dbr = NULL;
-lv_obj_t * temp_label_arm = NULL;
-lv_obj_t * temp_label_clw = NULL;
+lv_obj_t * drivebase_lf_templabel = NULL;
+lv_obj_t * drivebase_rf_templabel = NULL;
+lv_obj_t * intake_motor_a_templabel = NULL;
+lv_obj_t * intake_motor_b_templabel = NULL;
+lv_obj_t * chain_motor_templabel = NULL;
 
 pros::MotorGroup drivebase({1, 2});
 
