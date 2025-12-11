@@ -1,6 +1,7 @@
 #include "main.h"
 #include "globals.hpp"
 
+// Motors
 pros::Motor drivebase_lf (1);
 pros::Motor drivebase_rf (2);
 pros::Motor drivebase_lb (3);
@@ -9,13 +10,29 @@ pros::Motor intake_motor_a (5);
 pros::Motor intake_motor_b (6);
 pros::Motor chain_motor (7);
 
-pros::MotorGroup drivebase_l ({1, 2}, pros::MotorGears::blue);
-pros::MotorGroup drivebase_r ({3, 4}, pros::MotorGears::blue);
+// Motor groups
+pros::MotorGroup drivebase_l ({1, 3}, pros::MotorGears::blue);
+pros::MotorGroup drivebase_r ({2, 4}, pros::MotorGears::blue);
+pros::MotorGroup intake_motors ({5, 6}, pros::MotorGears::red);
 
+// 3-wire digital outputs
 pros::adi::DigitalOut pneumatics_piston_1('F');
-
 pros::adi::DigitalOut status_LED_1('G');
 pros::adi::DigitalOut status_LED_2('H');
+
+// Constants
+const int CONTROL_MODE_ARCADE = 0;
+const int CONTROL_MODE_TANK = 1;
+const int AUTON_ROUTINE_NONE = 0;
+const int AUTON_ROUTINE_RED_LEFT = 1;
+const int AUTON_ROUTINE_RED_RIGHT = 2;
+const int AUTON_ROUTINE_BLU_LEFT = 3;
+const int AUTON_ROUTINE_BLU_RIGHT = 4;
+const int AUTON_ROUTINE_SKILLS = 5;
+
+
+
+
 
 // TODO: Replace numbers when Jeff 2+ is complete.
 lemlib::Drivetrain drivebase (

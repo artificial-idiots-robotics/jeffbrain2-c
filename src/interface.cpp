@@ -53,7 +53,7 @@ static void auton_btn_click_action(lv_event_t * e) {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED) {
         uint8_t id = (uint8_t)(intptr_t)lv_obj_get_user_data(btn);
 
-        selected_auton = id;
+        selected_auton = static_cast<AutonRoutine>(id);
 
         const char *auton_names[] = {"None", "RED Left", "RED Right", "BLU Left", "BLU Right", "Skills"};
 
@@ -399,7 +399,7 @@ static void drive_mode_dropdown_action(lv_event_t * e) {
     
     if (lv_event_get_code(e) == LV_EVENT_VALUE_CHANGED) {
         int selected_index = lv_dropdown_get_selected(dropdown);
-        control_mode = selected_index;
+        control_mode = static_cast<ControlMode>(selected_index);
     }
 }
 
