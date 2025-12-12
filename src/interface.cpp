@@ -8,8 +8,12 @@ const int M3_RADIUS = 20;
 
 static lv_style_t style_base;
 static lv_style_t style_m3_btn;
+static lv_style_t style_tempbar_main;
+static lv_style_t style_tempbar_indicator;
+
 
 lv_obj_t * main_tabview = NULL;
+
 
 lv_obj_t * drivebase_lf_tempbar = NULL;
 lv_obj_t * drivebase_rf_tempbar = NULL;
@@ -19,6 +23,7 @@ lv_obj_t * intake_motor_a_tempbar = NULL;
 lv_obj_t * intake_motor_b_tempbar = NULL;
 lv_obj_t * chain_motor_tempbar = NULL;
 
+
 lv_obj_t * drivebase_lf_templabel = NULL;
 lv_obj_t * drivebase_rf_templabel = NULL;
 lv_obj_t * drivebase_lb_templabel = NULL;
@@ -27,13 +32,29 @@ lv_obj_t * intake_motor_a_templabel = NULL;
 lv_obj_t * intake_motor_b_templabel = NULL;
 lv_obj_t * chain_motor_templabel = NULL;
 
+
 lv_obj_t * auton_status_label = NULL;
 lv_obj_t * test_in_move_function_label = NULL;
 lv_obj_t * toggle_display_image = NULL;
 lv_obj_t * config_dropdown = NULL;
 
+
 AutonRoutine selected_auton = AutonRoutine::NONE;
 ControlMode control_mode = ControlMode::ARCADE;
+
+typedef struct {
+    lv_obj_t * container;
+    lv_obj_t * bar;
+    lv_obj_t * label;
+} motor_gauge_t;
+
+typedef struct {
+    const char * label_text;
+    lv_coord_t x_pos;
+    lv_coord_t y_pos;
+    int user_id;
+} auton_button_data_t;
+
 
 void create_stats_tab(lv_obj_t * parent_tab) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
@@ -65,6 +86,25 @@ static void auton_btn_click_action(lv_event_t * e) {
         }
 
     }
+}
+
+motor_gauge_t create_motor_gauge(lv_obj_t * parent, const char * label_text) {
+    motor_gauge_t motor_gauge;
+
+    motor_gauge.container = lv_obj_create(parent);
+    lv_obj_set_width(motor_gauge.container, LV_PCT(100));
+    lv_obj_set_height(motor_gauge.container, LV_SIZE_CONTENT);
+    lv_obj_set_layout(motor_gauge.container, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(motor_gauge.container, LV_FLEX_FLOW_ROW);
+
+    motor_gauge.bar = lv_bar_create(motor_gauge.container);
+    lv_obj_set_size(motor_gauge.bar, 240, 10);
+    lv_bar_set_range(motor_gauge.bar, 0, 100);
+
+    motor_gauge.label = lv_label_create(motor_gauge.container);
+    lv_label_set_text(motor_gauge.label, label_text);
+
+    return motor_gauge;
 }
 
 void temp_update_task(void* param) {
@@ -122,96 +162,33 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_radius(cont, 0, 0);
 
-    lv_obj_t * drivebase_lf_cont = lv_obj_create(cont);
-    lv_obj_set_width(drivebase_lf_cont, LV_PCT(100));
-    lv_obj_set_height(drivebase_lf_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(drivebase_lf_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(drivebase_lf_cont, LV_FLEX_FLOW_ROW);
-
-    drivebase_lf_tempbar = lv_bar_create(drivebase_lf_cont);
-    lv_obj_set_size(drivebase_lf_tempbar, 240, 10);
-    lv_bar_set_range(drivebase_lf_tempbar, 0, 100);
+    motor_gauge_t drivebase_lf_gauge = create_motor_gauge(cont, "Drivebase front left");
+    drivebase_lf_tempbar = drivebase_lf_gauge.bar;
+    drivebase_lf_templabel = drivebase_lf_gauge.label;
     
-    drivebase_lf_templabel = lv_label_create(drivebase_lf_cont);
-    lv_label_set_text(drivebase_lf_templabel, "Drivebase front left");
+    motor_gauge_t drivebase_rf_gauge = create_motor_gauge(cont, "Drivebase front right");
+    drivebase_rf_tempbar = drivebase_rf_gauge.bar;
+    drivebase_rf_templabel = drivebase_rf_gauge.label;
 
-    lv_obj_t * drivebase_rf_cont = lv_obj_create(cont);
-    lv_obj_set_width(drivebase_rf_cont, LV_PCT(100));
-    lv_obj_set_height(drivebase_rf_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(drivebase_rf_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(drivebase_rf_cont, LV_FLEX_FLOW_ROW);
+    motor_gauge_t drivebase_lb_gauge = create_motor_gauge(cont, "Drivebase back left");
+    drivebase_lb_tempbar = drivebase_lb_gauge.bar;
+    drivebase_lb_templabel = drivebase_lb_gauge.label;
 
-    drivebase_rf_tempbar = lv_bar_create(drivebase_rf_cont);
-    lv_obj_set_size(drivebase_rf_tempbar, 240, 10);
-    lv_bar_set_range(drivebase_rf_tempbar, 0, 100);
-    
-    drivebase_rf_templabel = lv_label_create(drivebase_rf_cont);
-    lv_label_set_text(drivebase_rf_templabel, "Drivebase front right");
+    motor_gauge_t drivebase_rb_gauge = create_motor_gauge(cont, "Drivebase back right");
+    drivebase_rb_tempbar = drivebase_rb_gauge.bar;
+    drivebase_rb_templabel = drivebase_rb_gauge.label;
 
-    lv_obj_t * drivebase_lb_cont = lv_obj_create(cont);
-    lv_obj_set_width(drivebase_lb_cont, LV_PCT(100));
-    lv_obj_set_height(drivebase_lb_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(drivebase_lb_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(drivebase_lb_cont, LV_FLEX_FLOW_ROW);
+    motor_gauge_t intake_motor_a_gauge = create_motor_gauge(cont, "Intake motor A");    
+    intake_motor_a_tempbar = intake_motor_a_gauge.bar;
+    intake_motor_a_templabel = intake_motor_a_gauge.label;  
 
-    drivebase_lb_tempbar = lv_bar_create(drivebase_lb_cont);
-    lv_obj_set_size(drivebase_lb_tempbar, 240, 10);
-    lv_bar_set_range(drivebase_lb_tempbar, 0, 100);
+    motor_gauge_t intake_motor_b_gauge = create_motor_gauge(cont, "Intake motor B");
+    intake_motor_b_tempbar = intake_motor_b_gauge.bar;
+    intake_motor_b_templabel = intake_motor_b_gauge.label;
 
-    drivebase_lb_templabel = lv_label_create(drivebase_lb_cont);
-    lv_label_set_text(drivebase_lb_templabel, "Drivebase back left");
-
-    lv_obj_t * drivebase_rb_cont = lv_obj_create(cont);
-    lv_obj_set_width(drivebase_rb_cont, LV_PCT(100));
-    lv_obj_set_height(drivebase_rb_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(drivebase_rb_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(drivebase_rb_cont, LV_FLEX_FLOW_ROW);
-
-    drivebase_rb_tempbar = lv_bar_create(drivebase_rb_cont);
-    lv_obj_set_size(drivebase_rb_tempbar, 240, 10);
-    lv_bar_set_range(drivebase_rb_tempbar, 0, 100);
-
-    drivebase_rb_templabel = lv_label_create(drivebase_rb_cont);
-    lv_label_set_text(drivebase_rb_templabel, "Drivebase back right");
-
-    lv_obj_t * intake_motor_a_cont = lv_obj_create(cont);
-    lv_obj_set_width(intake_motor_a_cont, LV_PCT(100));
-    lv_obj_set_height(intake_motor_a_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(intake_motor_a_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(intake_motor_a_cont, LV_FLEX_FLOW_ROW);
-
-    intake_motor_a_tempbar = lv_bar_create(intake_motor_a_cont);
-    lv_obj_set_size(intake_motor_a_tempbar, 240, 10);
-    lv_bar_set_range(intake_motor_a_tempbar, 0, 100);
-    
-    intake_motor_a_templabel = lv_label_create(intake_motor_a_cont);
-    lv_label_set_text(intake_motor_a_templabel, "Intake motor A");
-
-    lv_obj_t * intake_motor_b_cont = lv_obj_create(cont);
-    lv_obj_set_width(intake_motor_b_cont, LV_PCT(100));
-    lv_obj_set_height(intake_motor_b_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(intake_motor_b_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(intake_motor_b_cont, LV_FLEX_FLOW_ROW);
-
-    intake_motor_b_tempbar = lv_bar_create(intake_motor_b_cont);
-    lv_obj_set_size(intake_motor_b_tempbar, 240, 10);
-    lv_bar_set_range(intake_motor_b_tempbar, 0, 100);
-
-    intake_motor_b_templabel = lv_label_create(intake_motor_b_cont);
-    lv_label_set_text(intake_motor_b_templabel, "Intake motor B");
-
-    lv_obj_t * chain_motor_cont = lv_obj_create(cont);
-    lv_obj_set_width(chain_motor_cont, LV_PCT(100));
-    lv_obj_set_height(chain_motor_cont, LV_SIZE_CONTENT);
-    lv_obj_set_layout(chain_motor_cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(chain_motor_cont, LV_FLEX_FLOW_ROW);
-
-    chain_motor_tempbar = lv_bar_create(chain_motor_cont);
-    lv_obj_set_size(chain_motor_tempbar, 240, 10);
-    lv_bar_set_range(chain_motor_tempbar, 0, 100);
-
-    chain_motor_templabel = lv_label_create(chain_motor_cont);
-    lv_label_set_text(chain_motor_templabel, "Chain motor");
+    motor_gauge_t chain_motor_gauge = create_motor_gauge(cont, "Chain motor");
+    chain_motor_tempbar = chain_motor_gauge.bar;
+    chain_motor_templabel = chain_motor_gauge.label;
 
     lv_obj_t *bars[] = {
         drivebase_lf_tempbar,
@@ -226,14 +203,27 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     for (size_t i = 0; i < sizeof(bars) / sizeof(bars[0]); i++) {
         lv_obj_t* obj = bars[i];
 
-        lv_obj_set_style_radius(obj, 8, LV_PART_MAIN);
-        lv_obj_set_style_bg_color(obj, lv_color_hex(0x353139), LV_PART_MAIN);
-        lv_obj_set_style_border_width(obj, 1, LV_PART_MAIN);
-        lv_obj_set_style_border_color(obj, lv_color_hex(0x49454F), LV_PART_MAIN);
-        lv_obj_set_style_radius(obj, 8, LV_PART_INDICATOR);
+        lv_obj_add_style(obj, &style_tempbar_main, LV_PART_MAIN);
+        lv_obj_add_style(obj, &style_tempbar_indicator, LV_PART_INDICATOR);
     }
     
     pros::Task temp_task(temp_update_task, (void*)"TEMP_TASK");
+}
+
+lv_obj_t * create_auton_button(lv_obj_t * parent, const auton_button_data_t * data) {
+    lv_obj_t * btn = lv_btn_create(parent);
+    lv_obj_set_pos(btn, data->x_pos, data->y_pos);
+    lv_obj_set_size(btn, LV_PCT(45), 40);
+    lv_obj_set_user_data(btn, (void*)(intptr_t)data->user_id);
+    lv_obj_add_event_cb(btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_style(btn, &style_m3_btn, 0);
+    lv_obj_set_style_bg_color(btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
+    lv_obj_set_style_shadow_width(btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
+
+    lv_obj_t * label = lv_label_create(btn);
+    lv_label_set_text(label, data->label_text);
+
+    return btn;
 }
 
 void create_auton_tab(lv_obj_t * parent_tab) {
@@ -256,77 +246,18 @@ void create_auton_tab(lv_obj_t * parent_tab) {
     lv_obj_set_pos(auton_status_label, 10, 10);
     lv_obj_set_width(auton_status_label, LV_PCT(90));
 
-    lv_obj_t * none_btn = lv_btn_create(cont);
-    lv_obj_set_pos(none_btn, 10, 50);
-    lv_obj_set_size(none_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(none_btn, (void*)0);
-    lv_obj_add_event_cb(none_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(none_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(none_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(none_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
+    const auton_button_data_t auton_buttons[] = {
+        {"None", 10, 50, 0},
+        {"Skills", 230, 50, 5},
+        {"RED Left", 10, 110, 1},
+        {"RED Right", 230, 110, 2},
+        {"BLU Left", 10, 170, 3},
+        {"BLU Right", 230, 170, 4}
+    };
 
-    lv_obj_t * none_label = lv_label_create(none_btn);
-    lv_label_set_text(none_label, "None");
-
-    lv_obj_t * skills_btn = lv_btn_create(cont);
-    lv_obj_set_pos(skills_btn, 230, 50);
-    lv_obj_set_size(skills_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(skills_btn, (void*)5);
-    lv_obj_add_event_cb(skills_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(skills_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(skills_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(skills_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-
-    lv_obj_t * skills_label = lv_label_create(skills_btn);
-    lv_label_set_text(skills_label, "Skills");
-
-    lv_obj_t * red_left_btn = lv_btn_create(cont);
-    lv_obj_set_pos(red_left_btn, 10, 110);
-    lv_obj_set_size(red_left_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(red_left_btn, (void*)1);
-    lv_obj_add_event_cb(red_left_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(red_left_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(red_left_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(red_left_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-
-    lv_obj_t * red_left_label = lv_label_create(red_left_btn);
-    lv_label_set_text(red_left_label, "RED Left");
-
-    lv_obj_t * red_right_btn = lv_btn_create(cont);
-    lv_obj_set_pos(red_right_btn, 230, 110);
-    lv_obj_set_size(red_right_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(red_right_btn, (void*)2);
-    lv_obj_add_event_cb(red_right_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(red_right_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(red_right_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(red_right_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    
-    lv_obj_t * red_right_label = lv_label_create(red_right_btn);
-    lv_label_set_text(red_right_label, "RED Right");
-
-    lv_obj_t * blu_left_btn = lv_btn_create(cont);
-    lv_obj_set_pos(blu_left_btn, 10, 170);
-    lv_obj_set_size(blu_left_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(blu_left_btn, (void*)3);
-    lv_obj_add_event_cb(blu_left_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(blu_left_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(blu_left_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(blu_left_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-
-    lv_obj_t * blu_left_label = lv_label_create(blu_left_btn);
-    lv_label_set_text(blu_left_label, "BLU Left");
-
-    lv_obj_t * blu_right_btn = lv_btn_create(cont);
-    lv_obj_set_pos(blu_right_btn, 230, 170);
-    lv_obj_set_size(blu_right_btn, LV_PCT(45), 40);
-    lv_obj_set_user_data(blu_right_btn, (void*)4);
-    lv_obj_add_event_cb(blu_right_btn, auton_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(blu_right_btn, &style_m3_btn, 0);
-    lv_obj_set_style_bg_color(blu_right_btn, M3_ACCENT_COLOR, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-    lv_obj_set_style_shadow_width(blu_right_btn, 0, LV_PART_MAIN | LV_STATE_PRESSED | LV_STATE_CHECKED);
-
-    lv_obj_t * blu_right_label = lv_label_create(blu_right_btn);
-    lv_label_set_text(blu_right_label, "BLU Right");
+    for (size_t i = 0; i < sizeof(auton_buttons) / sizeof(auton_buttons[0]); i++) {
+        create_auton_button(cont, &auton_buttons[i]);
+    }
 }
 
 static void image_button_action(lv_event_t * e) {
@@ -458,6 +389,15 @@ void initialize_interface() {
     lv_style_set_shadow_opa(&style_m3_btn, LV_OPA_50);
     lv_style_set_bg_color(&style_m3_btn, lv_color_hex(0x49454F));
     lv_style_set_text_color(&style_m3_btn, lv_color_white());
+
+    lv_style_init(&style_tempbar_main);
+    lv_style_set_radius(&style_tempbar_main, 8);
+    lv_style_set_bg_color(&style_tempbar_main, lv_color_hex(0x353139));
+    lv_style_set_border_width(&style_tempbar_main, 1);
+    lv_style_set_border_color(&style_tempbar_main, lv_color_hex(0x49454F));
+
+    lv_style_init(&style_tempbar_indicator);
+    lv_style_set_radius(&style_tempbar_indicator, 8);
 
     lv_obj_t * screen = lv_scr_act();
     lv_obj_add_style(screen, &style_base, 0);
