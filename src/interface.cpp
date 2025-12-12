@@ -11,9 +11,7 @@ static lv_style_t style_m3_btn;
 static lv_style_t style_tempbar_main;
 static lv_style_t style_tempbar_indicator;
 
-
 lv_obj_t * main_tabview = NULL;
-
 
 lv_obj_t * drivebase_lf_tempbar = NULL;
 lv_obj_t * drivebase_rf_tempbar = NULL;
@@ -23,7 +21,6 @@ lv_obj_t * intake_motor_a_tempbar = NULL;
 lv_obj_t * intake_motor_b_tempbar = NULL;
 lv_obj_t * chain_motor_tempbar = NULL;
 
-
 lv_obj_t * drivebase_lf_templabel = NULL;
 lv_obj_t * drivebase_rf_templabel = NULL;
 lv_obj_t * drivebase_lb_templabel = NULL;
@@ -32,12 +29,10 @@ lv_obj_t * intake_motor_a_templabel = NULL;
 lv_obj_t * intake_motor_b_templabel = NULL;
 lv_obj_t * chain_motor_templabel = NULL;
 
-
 lv_obj_t * auton_status_label = NULL;
 lv_obj_t * test_in_move_function_label = NULL;
 lv_obj_t * toggle_display_image = NULL;
 lv_obj_t * config_dropdown = NULL;
-
 
 AutonRoutine selected_auton = AutonRoutine::NONE;
 ControlMode control_mode = ControlMode::ARCADE;
@@ -242,12 +237,12 @@ void create_auton_tab(lv_obj_t * parent_tab) {
     lv_obj_set_width(auton_status_label, LV_PCT(90));
 
     const auton_button_data_t auton_buttons[] = {
-        {"None", 10, 50, 0},
-        {"Skills", 230, 50, 5},
-        {"RED Left", 10, 110, 1},
-        {"RED Right", 230, 110, 2},
-        {"BLU Left", 10, 170, 3},
-        {"BLU Right", 230, 170, 4}
+        {"None", 10, 50, static_cast<int>(AutonRoutine::NONE)},
+        {"Skills", 230, 50, static_cast<int>(AutonRoutine::SKILLS)},
+        {"RED Left", 10, 110, static_cast<int>(AutonRoutine::RED_LEFT)},
+        {"RED Right", 230, 110, static_cast<int>(AutonRoutine::RED_RIGHT)},
+        {"BLU Left", 10, 170, static_cast<int>(AutonRoutine::BLU_LEFT)},
+        {"BLU Right", 230, 170, static_cast<int>(AutonRoutine::BLU_RIGHT)}
     };
 
     for (size_t i = 0; i < sizeof(auton_buttons) / sizeof(auton_buttons[0]); i++) {
@@ -258,8 +253,7 @@ void create_auton_tab(lv_obj_t * parent_tab) {
 static void image_button_action(lv_event_t * e) {
     lv_obj_t * btn = (lv_obj_t *)lv_event_get_target(e); 
     
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED) { 
-        
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED) {
         if (lv_obj_has_flag(toggle_display_image, LV_OBJ_FLAG_HIDDEN)) {
             lv_obj_clear_flag(toggle_display_image, LV_OBJ_FLAG_HIDDEN);
             lv_obj_set_style_bg_color(btn, LV_COLOR_MAKE(0, 200, 0), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -335,15 +329,7 @@ void testmove_button_action(lv_event_t * e) {
 }
 
 void create_test_tab(lv_obj_t * parent_tab) {
-    lv_obj_t * cont = lv_obj_create(parent_tab);
-
-    lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
-    lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
-
-    lv_obj_set_style_border_width(cont, 0, 0);
-    lv_obj_set_style_pad_all(cont, 0, 0);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_radius(cont, 0, 0);
+    lv_obj_t * cont = create_tab_content_container(parent_tab, LV_FLEX_FLOW_COLUMN);
     
     lv_obj_t * testmove = lv_btn_create(cont);
     lv_obj_set_pos(testmove, 10, 10);
@@ -400,17 +386,23 @@ void initialize_interface() {
     lv_obj_set_style_bg_color(main_tabview, M3_SURFACE_COLOR, LV_PART_MAIN);
     lv_obj_set_style_pad_all(main_tabview, 0, LV_PART_MAIN);
 
-    lv_obj_t * stats_tab = lv_tabview_add_tab(main_tabview, "Stats");
-    create_stats_tab(stats_tab);
+    // lv_obj_t * stats_tab = lv_tabview_add_tab(main_tabview, "Stats");
+    // create_stats_tab(stats_tab);
+
     lv_obj_t * temp_tab = lv_tabview_add_tab(main_tabview, "Monitor");
     create_temp_tab(temp_tab);
+
     lv_obj_t * auton_tab = lv_tabview_add_tab(main_tabview, "Auton");
     create_auton_tab(auton_tab);
+
     lv_obj_t * image_tab = lv_tabview_add_tab(main_tabview, "Images");
     create_image_tab(image_tab);
+
     lv_obj_t * settings_tab = lv_tabview_add_tab(main_tabview, "Settings");
     create_settings_tab(settings_tab);
+
     lv_obj_t * test_tab = lv_tabview_add_tab(main_tabview, "Test");
     create_test_tab(test_tab);
+
     lv_tabview_set_act(main_tabview, 1, LV_ANIM_ON); 
 }
