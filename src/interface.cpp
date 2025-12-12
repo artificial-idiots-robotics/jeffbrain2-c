@@ -9,8 +9,8 @@
 static lv_style_t style_base;
 static lv_style_t style_m3_btn;
 
-
 lv_obj_t * main_tabview = NULL;
+
 lv_obj_t * drivebase_lf_tempbar = NULL;
 lv_obj_t * drivebase_rf_tempbar = NULL;
 lv_obj_t * drivebase_lb_tempbar = NULL;
@@ -18,6 +18,7 @@ lv_obj_t * drivebase_rb_tempbar = NULL;
 lv_obj_t * intake_motor_a_tempbar = NULL;
 lv_obj_t * intake_motor_b_tempbar = NULL;
 lv_obj_t * chain_motor_tempbar = NULL;
+
 lv_obj_t * drivebase_lf_templabel = NULL;
 lv_obj_t * drivebase_rf_templabel = NULL;
 lv_obj_t * drivebase_lb_templabel = NULL;
@@ -31,8 +32,8 @@ lv_obj_t * test_in_move_function_label = NULL;
 lv_obj_t * toggle_display_image = NULL;
 lv_obj_t * config_dropdown = NULL;
 
-int selected_auton = 0;
-int control_mode = 0;
+AutonRoutine selected_auton = AutonRoutine::NONE;
+ControlMode control_mode = ControlMode::ARCADE;
 
 void create_stats_tab(lv_obj_t * parent_tab) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
