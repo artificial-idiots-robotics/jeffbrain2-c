@@ -32,12 +32,12 @@ extern pros::MotorGroup intake_motors;
 
 extern const lv_img_dsc_t creature;
 
-extern double inchesToDegrees(double inches, double gear_ratio, double wheel_diameter);
-extern void driveForwardInches(pros::MotorGroup& targetMotorGroup, double inches, double gear_ratio, double wheel_diameter);
 void initialize_interface();
 void temp_update_task(void* param);
-void legacy_temp_update_task(void* param);
 void create_auton_tab(lv_obj_t * parent_tab);
 void create_temp_tab(lv_obj_t * parent_tab);
+void create_image_tab(lv_obj_t * parent_tab);
+void create_settings_tab(lv_obj_t * parent_tab);
+void create_stats_tab(lv_obj_t * parent_tab);
 
 #endif // _INTERFACE_HPP_

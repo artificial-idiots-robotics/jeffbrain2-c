@@ -55,18 +55,23 @@ typedef struct {
     int user_id;
 } auton_button_data_t;
 
-
-void create_stats_tab(lv_obj_t * parent_tab) {
+lv_obj_t * create_tab_content_container(lv_obj_t * parent_tab, lv_flex_flow_t flow) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
 
     lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
     lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_flow(cont, flow);
 
     lv_obj_set_style_border_width(cont, 0, 0);
     lv_obj_set_style_pad_all(cont, 0, 0);
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_radius(cont, 0, 0);
+
+    return cont;
+}
+
+void create_stats_tab(lv_obj_t * parent_tab) {
+    lv_obj_t * cont = create_tab_content_container(parent_tab, LV_FLEX_FLOW_ROW);
 }
 
 static void auton_btn_click_action(lv_event_t * e) {
@@ -150,17 +155,7 @@ void temp_update_task(void* param) {
 }
 
 void create_temp_tab(lv_obj_t * parent_tab) {
-    lv_obj_t * cont = lv_obj_create(parent_tab);
-
-    lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
-
-    lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
-
-    lv_obj_set_style_border_width(cont, 0, 0);
-    lv_obj_set_style_pad_all(cont, 0, 0);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_radius(cont, 0, 0);
+    lv_obj_t * cont = create_tab_content_container(parent_tab, LV_FLEX_FLOW_COLUMN);
 
     motor_gauge_t drivebase_lf_gauge = create_motor_gauge(cont, "Drivebase front left");
     drivebase_lf_tempbar = drivebase_lf_gauge.bar;
@@ -276,15 +271,7 @@ static void image_button_action(lv_event_t * e) {
 }
 
 void create_image_tab(lv_obj_t * parent_tab) {
-    lv_obj_t * cont = lv_obj_create(parent_tab);
-
-    lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
-    lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
-
-    lv_obj_set_style_border_width(cont, 0, 0);
-    lv_obj_set_style_pad_all(cont, 0, 0);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_radius(cont, 0, 0);
+    lv_obj_t * cont = create_tab_content_container(parent_tab, LV_FLEX_FLOW_ROW);
 
     lv_obj_t * image_btn = lv_btn_create(cont);
     lv_obj_set_pos(image_btn, 10, 10);
@@ -319,15 +306,7 @@ static void drive_mode_dropdown_action(lv_event_t * e) {
 }
 
 void create_settings_tab(lv_obj_t * parent_tab) {
-    lv_obj_t * cont = lv_obj_create(parent_tab);
-
-    lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
-    lv_obj_set_layout(cont, LV_LAYOUT_FLEX);
-
-    lv_obj_set_style_border_width(cont, 0, 0);
-    lv_obj_set_style_pad_all(cont, 0, 0);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_radius(cont, 0, 0);
+    lv_obj_t * cont = create_tab_content_container(parent_tab, LV_FLEX_FLOW_COLUMN);
 
     lv_obj_t * config_dropdown = lv_dropdown_create(cont);
     lv_obj_set_pos(config_dropdown, 50, 10);
