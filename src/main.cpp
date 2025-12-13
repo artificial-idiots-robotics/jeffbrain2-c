@@ -47,22 +47,34 @@ void competition_initialize() {
 
 void autonomous() {
     switch (selected_auton) {
-        case AutonRoutine::NONE:
+        case AutonRoutine::NONE: {
             break;
-        case AutonRoutine::RED_LEFT: 
+        }
+        
+        case AutonRoutine::RED_LEFT: {
             break;
-        case AutonRoutine::RED_RIGHT: 
+        }
+        
+        case AutonRoutine::RED_RIGHT: {
             break;
-        case AutonRoutine::BLU_LEFT:
+        }
+        
+        case AutonRoutine::BLU_LEFT: {
             break;
-        case AutonRoutine::BLU_RIGHT: 
+        }
+        
+        case AutonRoutine::BLU_RIGHT:  {
             break;
-        case AutonRoutine::SKILLS:
-            break;
+        }
 
-        default:
+        case AutonRoutine::SKILLS: {
+            break;
+        }
+
+        default: {
             // In case of variable somehow reaching values beyond our comprehension. Also known as 6.
             break;
+        }
     }
 }
 
@@ -72,22 +84,27 @@ void opcontrol() {
 
 	while (true) {
         switch (control_mode) {
-            case ControlMode::ARCADE:
+            case ControlMode::ARCADE: {
                 int dir = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
                 int turn = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
                 chassis.arcade(dir, turn);
                 break;
-            case ControlMode::TANK:
+            }
+
+            case ControlMode::TANK: {
                 int leftdrive = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
                 int rightdrive = master_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
 
                 chassis.tank(leftdrive, rightdrive);
                 break;
-            default:
+            }
+
+            default: {
                 // Default to ARCADE mode if control_mode is somehow invalid
                 control_mode = ControlMode::ARCADE;
                 break;
+            }
         }
 
         pros::delay(5);

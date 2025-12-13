@@ -11,7 +11,7 @@ pros::Motor intake_motor_b (6);
 pros::Motor chain_motor (7);
 
 // Motor groups
-pros::MotorGroup drivebase_l ({1, 3}, pros::MotorGears::blue);
+pros::MotorGroup drivebase_l ({-1, -3}, pros::MotorGears::blue);
 pros::MotorGroup drivebase_r ({2, 4}, pros::MotorGears::blue);
 pros::MotorGroup intake_motors ({5, 6}, pros::MotorGears::red);
 
