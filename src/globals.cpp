@@ -71,7 +71,7 @@ lemlib::ControllerSettings angular_controller(
     0                             // maximum acceleration (slew)
 );
 
-lemlib::Chassis chassis (drivebase, lateral_controller, angular_controller, sensors);
+lemlib::Chassis chassis(drivebase, lateral_controller, angular_controller, sensors);
 
 pros::Controller master_controller(pros::E_CONTROLLER_MASTER);
 pros::Controller partner_controller(pros::E_CONTROLLER_PARTNER);
